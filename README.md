@@ -1,48 +1,53 @@
-huaweicloudstack.huaweicloudstack_ansible_modules
+huaweicloud.huaweicloudstack_ansible_modules
 =========
-
-This role includes the latest changes and bug fixes for HuaweiCloudStack modules from the `devel` branch of [Ansible repository](https://github.com/ansible/ansible). If you cannot wait for Ansible's next release, installing this role is a good choice.
 
 Prerequisite
 ------------
 
-The usage of this playbook role assumes that you've already setup an Ansible environment for HuaweiCloudStack.
+The usage of this ansible modules assumes that you've already setup an Ansible environment for HuaweiCloud Stack.
 
 [Installed the ansible](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html) in your environment.
 
 Installation
 ------------
 
-Install the role.
-
+1. Install the modules
   ``` bash
-  $ ansible-galaxy install huaweicloudstack.huaweicloudstack_ansible_modules
+  $ ./install.sh
   ```
+2. Install required packages
+  ``` bash
+  $ sudo pip install -r requirement.txt
+  ```
+
 
 Example Playbook
 ----------------
+```
+$ cat test.yml
+- hosts: localhost
+  tasks:
+    - name: create an auto-scaling group
+      hcs_as_group:
+        auth:
+          auth_url: "{{ auth_url }}"
+          username: "{{ user_name }}"
+          password: "{{ password }}"
+          domain_name: "{{ domain_name }}"
+          project_name: "{{ project_name }}"
+        region: "{{ region }}"
 
-    $ cat test.yml
-    - hosts: localhost
-      roles:
-        - { role: huaweicloudstack.huaweicloudstack_ansible_modules }
-      tasks:
-		- name: create a new vpc
-		  hcs_network_vpc:
-			identity_endpoint: "{{ auth_url }}"
-			user: "{{ user_name }}"
-			password: "{{ password }}"
-			domain: "{{ domain_name }}"
-			project: "{{ project_name }}"
-			region: "{{ region }}"
-
-			name: "{{ vpc_name }}"
-			cidr: "192.168.100.0/24"
-			state: present
-		  register: vpc 
-		- name: dump the output
-		  debug:
-			msg: '{{ vpc }}'
+        group_name: "{{ group_name }}"
+        state: present
+        vpc_id: "{{ vpc_id }}"
+        networks: ["{{ test_network }}"]
+        desire_instance_number: 2
+        min_instance_number: 1
+        max_instance_number: 5
+        cool_down_time: 600
+        health_periodic_audit_time: 15
+        delete_publicip: True
+```
 
 Run ansible
 -----------

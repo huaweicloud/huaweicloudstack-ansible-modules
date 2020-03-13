@@ -113,7 +113,7 @@ options:
             - Specifies the cooling duration (in seconds). The value ranges from 0 to 86400.
         type: int
         default: 900
-extends_documentation_fragment: hwc
+extends_documentation_fragment: hcs
 '''
 
 EXAMPLES = '''
@@ -157,12 +157,14 @@ RETURN = '''
 '''
 
 from ansible.module_utils.hwc_utils import (
-    Config, HwcClientException, HwcModule, are_different_dicts, build_path,
-    get_region, is_empty_value, navigate_value, wait_to_finish)
+    HwcClientException, are_different_dicts, build_path, get_region,
+    is_empty_value, navigate_value, wait_to_finish)
+from ansible.module_utils.hcs_utils import (
+    Config, HcsModule)
 
 
 def build_module():
-    return HwcModule(
+    return HcsModule(
         argument_spec=dict(
             state=dict(type='str', default='present', choices=['present', 'absent']),
             group_id=dict(type='str', required=True),
